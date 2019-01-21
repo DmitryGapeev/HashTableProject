@@ -10,7 +10,8 @@ namespace AlgorithmsDataStructures
 	{
 		static void Main(string[] args)
 		{
-			TestHashTable();
+			TestHashFunctions();
+			//TestHashTable();
 			Console.ReadKey();
 		}
 
@@ -45,8 +46,63 @@ namespace AlgorithmsDataStructures
 				position = hashTable.Find(value);
 				Console.WriteLine("position = " + position + ", value = "+value);
 			}
+
+			Console.WriteLine(new string('=', 50));
+		}
+
+		static void TestHashFunctions()
+		{
+
+			int tableSize = 50;
+			int[] values = new int[tableSize];
+			Random rnd = new Random();
+
+			for (int i = 0; i < tableSize; i++)
+			{
+				int newValue = rnd.Next(0, 5000);
+				values[i] = newValue;
+				Console.Write(newValue+" ");
+			}
 				
 
+			List<Func<int, int>> hashFunctions = new List<Func<int, int>>
+			{
+				x => ((7 * x + 5) % 17) % tableSize,
+				x => ((3 * x + 1) % 13) % tableSize,
+				x => ((17 * x + 13) % 31) % tableSize
+			};
+
+			HashTable<int> hashTable = new HashTable<int>(tableSize, 3, hashFunctions[0]);
+
+			Console.WriteLine(Environment.NewLine + "test put values" + Environment.NewLine);
+
+			for (int i = 0; i <values.Length / 2; i++)
+				hashTable.Put(values[i]);
+
+			foreach (var t in hashTable.slots)
+				Console.Write(t+" ");
+
+			Console.WriteLine();
+			Console.WriteLine(Environment.NewLine + "test put values" + Environment.NewLine);
+			hashTable = new HashTable<int>(tableSize, 3, hashFunctions[1]);
+
+			for (int i = 0; i < values.Length / 2; i++)
+				hashTable.Put(values[i]);
+
+			foreach (var t in hashTable.slots)
+				Console.Write(t + " ");
+
+			Console.WriteLine();
+			Console.WriteLine(Environment.NewLine + "test put values" + Environment.NewLine);
+			hashTable = new HashTable<int>(tableSize, 3, hashFunctions[2]);
+
+			for (int i = 0; i < values.Length / 2; i++)
+				hashTable.Put(values[i]);
+
+			foreach (var t in hashTable.slots)
+				Console.Write(t + " ");
+
+			Console.WriteLine();
 			Console.WriteLine(new string('=', 50));
 		}
 	}
